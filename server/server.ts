@@ -7,8 +7,8 @@ import db from "./db";
 
 const port = 9000;
 const jwtSecret = Buffer.from("Zn8Q5tyZ/G1MHltc4F/gTkVJMlrbKiZt", "base64");
-
 const app = express();
+
 app.use(
   cors(),
   bodyParser.json(),
