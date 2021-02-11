@@ -3,28 +3,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const fs_1 = __importDefault(require("fs"));
 const express_1 = __importDefault(require("express"));
-const express_jwt_1 = __importDefault(require("express-jwt"));
-const body_parser_1 = __importDefault(require("body-parser"));
-const cors_1 = __importDefault(require("cors"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const db_1 = __importDefault(require("./db"));
+const apollo_server_express_1 = require("apollo-server-express");
+const login_1 = require("./routes/login/login");
+const middleware_1 = require("./middleware/middleware");
+const resolvers_1 = require("./resolvers/resolvers");
 const port = 9000;
-const jwtSecret = Buffer.from("Zn8Q5tyZ/G1MHltc4F/gTkVJMlrbKiZt", "base64");
 const app = express_1.default();
-app.use(cors_1.default(), body_parser_1.default.json(), express_jwt_1.default({
-    secret: jwtSecret,
-    algorithms: ["Zn8Q5tyZ/G1MHltc4F/gTkVJMlrbKiZt", "base64"],
-    credentialsRequired: false,
-}));
-app.post("/login", (req, res) => {
-    const { email, password } = req.body;
-    const user = db_1.default.users.list().find((user) => user.email === email);
-    if (!(user && user.password === password)) {
-        res.sendStatus(401);
-        return;
-    }
-    const token = jsonwebtoken_1.default.sign({ sub: user.id }, jwtSecret);
-    res.send({ token });
+app.use(middleware_1.arrMiddleware);
+const typeDefs = apollo_server_express_1.gql(fs_1.default.readFileSync("./schema/schema.graphql", { encoding: "utf8" }));
+const resolvers = {
+    Query: resolvers_1.Query,
+};
+const apolloServer = new apollo_server_express_1.ApolloServer({
+    typeDefs,
+    resolvers,
 });
-app.listen(port, () => console.info(`Server started on port ${port}`));
+apolloServer.applyMiddleware({ app, path: "/graphql" });
+app.post("/login", login_1.loginRouter);
+app.listen(port, () => console.info(`Server started on port ${port}, GraphQL server at http://localhost:9000/graphql`));

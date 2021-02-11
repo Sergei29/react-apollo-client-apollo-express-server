@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --ext js,graphql --ignore data/ dist/server.js"
+    "start": "nodemon --ext js,graphql --ignore data/ dist/server.js",
+    "compile": "tsc -w"
   },
   "author": "",
   "license": "ISC",
