@@ -3,11 +3,11 @@
 
 const accessTokenKey = "accessToken";
 
-export function getAccessToken() {
+export const getAccessToken = () => {
   return localStorage.getItem(accessTokenKey);
-}
+};
 
-export async function login(email: string, password: string) {
+export const login = async (email: string, password: string) => {
   const response = await fetch("http://localhost:9000/login", {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -18,12 +18,12 @@ export async function login(email: string, password: string) {
     localStorage.setItem(accessTokenKey, token);
   }
   return response.ok;
-}
+};
 
-export function isLoggedIn() {
+export const isLoggedIn = () => {
   return !!localStorage.getItem(accessTokenKey);
-}
+};
 
-export function logout() {
+export const logout = () => {
   localStorage.removeItem(accessTokenKey);
-}
+};
