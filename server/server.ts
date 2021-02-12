@@ -3,7 +3,7 @@ import express from "express";
 import { ApolloServer, gql } from "apollo-server-express";
 import { loginRouter } from "./routes/login/login";
 import { arrMiddleware } from "./middleware/middleware";
-import { Query } from "./resolvers/resolvers";
+import resolvers from "./resolvers/resolvers";
 
 const port = 9000;
 const app = express();
@@ -12,9 +12,6 @@ app.use(arrMiddleware);
 const typeDefs = gql(
   fs.readFileSync("./schema/schema.graphql", { encoding: "utf8" })
 );
-const resolvers = {
-  Query,
-};
 
 const apolloServer = new ApolloServer({
   typeDefs,

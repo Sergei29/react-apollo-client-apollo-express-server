@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --ext js,graphql --ignore data/ dist/server.js",
+    "server": "nodemon  dist/server.js",
     "compile": "tsc -w"
   },
   "author": "",
